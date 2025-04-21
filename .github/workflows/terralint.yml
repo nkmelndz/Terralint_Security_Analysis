@@ -1,0 +1,24 @@
+name: Terralint Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  terralint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Install Terralint
+        run: go install github.com/tenable/terralint@latest
+
+      - name: Run Terralint
+        run: terralint lint ./terraform --format json
